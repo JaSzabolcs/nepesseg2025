@@ -1,3 +1,4 @@
+import os
 telepulesek=[]
 with open('lakossag_2025.csv','r',encoding='utf-8') as forras:
     forras.readline()
@@ -29,8 +30,35 @@ def megye_adatai():
     print(f'A megyében {lakossag} lakos él')
     print(f'A városokban (beleértve a megyei jogú várost és megyeszékhelyet is) {varoslakok} élnek')
 
-
-
+def telepules_tipusai():
+    tipuslista=[]
+    for i in telepulesek:
+        if i['tipus'] not in tipuslista:
+            tipuslista.append(i['tipus'])
+    abc='abcdefghijkl'
+    index=0
+    tipusok={}
+    for i in tipuslista:
+        tipusok[abc[index]]=i
+        index+=1
+    for kulcs in tipusok:
+        print(f'[{kulcs}] {tipusok[kulcs]}')
+    valasztott_tipus=input('Mi a választott típus: ')
+    if valasztott_tipus not in tipusok:
+        print('Nincs ilyen típus')
+        return
+    valasztott_tipus=tipusok[valasztott_tipus]
+    print(valasztott_tipus)
+    
+    db=0
+    sorok=os.get_terminal_size().lines
+    megjelenitettdbszam=sorok-1
+    for i in [x for x in telepulesek if x['tipus']==valasztott_tipus ]:
+        print(f'{i['telepules']}, lakosok száma: {i['ferfi']+i['no']}')
+        db+=1
+        if db %megjelenitettdbszam==0:
+            input('')
+            os.system('cls')
 while True:
     print('[1] Megye adatai')
     print('[2] Település típusai')
@@ -40,5 +68,7 @@ while True:
         break
     elif menupont=='1':
         megye_adatai() 
+    elif menupont=='2':
+        telepules_tipusai()
 
 
